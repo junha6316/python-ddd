@@ -1,9 +1,10 @@
 
 # batch를 위한 테스트
+import pytest
 from datetime import date
 
-from ..domain.models.orderline import OrderLine
-from ..domain.models.batch import Batch
+from domain.models.orderline import OrderLine
+from domain.models.batch import Batch
 
 def make_batch_and_line(sku, batch_qty, line_qty):
     batch = Batch(sku, batch_qty, qty=batch_qty, eta=date.today())
