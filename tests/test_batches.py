@@ -34,3 +34,8 @@ def test_sku가_동일하지_않으면_할당_불가능():
     batch = Batch("batch-001", "TEST_BATCH_SKU", 100, eta=None)
     different_sku_line = OrderLine("order-123", "OTHER_SKU", 10)
     assert batch.can_allocate(different_sku_line) is False
+
+def test_할당된_라인만_deallocate_가능():
+    batch, unallocated_line = make_batch_and_line("TEST", 20, 20)
+    batch.deallocate(unallocated_line)
+    assert batch.available_quantity == 20
