@@ -2,8 +2,8 @@
 # batch를 위한 테스트
 from datetime import date
 
-from ..domain.orderline import OrderLine
-from ..domain.batch import Batch
+from ..domain.models.orderline import OrderLine
+from ..domain.models.batch import Batch
 
 
 def test_할당시_사용가능한_양_감소():
