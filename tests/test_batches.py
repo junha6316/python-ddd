@@ -7,7 +7,7 @@ from domain.models.orderline import OrderLine
 from domain.models.batch import Batch
 
 def make_batch_and_line(sku, batch_qty, line_qty):
-    batch = Batch(sku, batch_qty, qty=batch_qty, eta=date.today())
+    batch = Batch("batch-001", sku, qty=batch_qty, eta=date.today())
     line = OrderLine('order-ref', sku, line_qty)
     return batch, line
 
@@ -24,7 +24,7 @@ def test_라인_할당량보다_많이_남아있을_때_할당_가능():
 
 def test_라인_할당량이_배치보다_클때_할당_불가능():
     small_batch, large_line = make_batch_and_line("ELEGANT-LAMP", 2, 20)
-    assert small_batch.can_allocate(large_line)
+    assert small_batch.can_allocate(large_line) is False
 
 def test_라인_할당량과_배치가_동일할_때_가능():
     batch, line = make_batch_and_line("ELEGANT-LAMP", 20, 20)
