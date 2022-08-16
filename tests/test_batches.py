@@ -39,3 +39,9 @@ def test_할당된_라인만_deallocate_가능():
     batch, unallocated_line = make_batch_and_line("TEST", 20, 20)
     batch.deallocate(unallocated_line)
     assert batch.available_quantity == 20
+
+def test_할당은_idempotent():
+    batch, line = make_batch_and_line("TEST", 20, 2)
+    batch.allocate(line)
+    batch.allocate(line)
+    assert batch.available_quantity == 18
