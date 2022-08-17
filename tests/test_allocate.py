@@ -13,7 +13,7 @@ def test_inStock되어_있는_배치를_먼저설정한다():
     shipment_batch = Batch("shipment-batch", "retro-clock", 100, eta=date.today()+ timedelta(days=1))
     line = OrderLine("oref", "retro-clock", 10)
 
-    Batch.allocate(line, [in_stock_batch, shipment_batch])
+    Batch.auto_allocate(line, [in_stock_batch, shipment_batch])
 
     assert in_stock_batch.available_quantity == 90
     assert shipment_batch.available_quantity == 100
@@ -24,7 +24,7 @@ def test_더_빠른_배치를_선호():
     latest = Batch("slow-batch", "MINIMALIST-SPOON", 100, eta=later)
     line = OrderLine("order1", "MINIMALIST-SPOON", 10)
 
-    Batch.allocate(line, [medium, earliest, latest])
+    Batch.auto_allocate(line, [medium, earliest, latest])
 
     assert earliest.available_quantity == 90
     assert medium.available_quantity == 100
@@ -36,5 +36,5 @@ def test_할당된_배치의_ref를_반환():
 
     line = OrderLine("oref", "HIGHBROW-POSTER", 10)
 
-    allocation = Batch.allocate(line, [in_stock_batch, shipment_batch])
+    allocation = Batch.auto_allocate(line, [in_stock_batch, shipment_batch])
     assert allocation == in_stock_batch.reference
