@@ -3,6 +3,8 @@ from typing import Optional, List
 
 from .orderline import OrderLine
 
+class OutofStock(Exception):
+    pass
 
 class Batch:
     def __init__(self, ref:str, sku: str, qty: int, eta: Optional[date] = None):
@@ -30,10 +32,14 @@ class Batch:
 
     @classmethod
     def auto_allocate(cls, line:"OrderLine", batches: "List[Batch]"):
-        b:"Batch"
-        batch = next(b for b in sorted(batches) if b.can_allocate(line))
-        batch.allocate(line)
-        return batch.reference
+        try:
+            b:"Batch"
+            batch = next(b for b in sorted(batches) if b.can_allocate(line))
+            batch.allocate(line)
+            return batch.reference
+        except: 
+            raise OutofStock(f"Out of stock for sku {line.sku}")
+        
 
     def can_allocate(self, line: OrderLine) -> bool:
         return self.sku == line.sku and self.available_quantity >= line.qty
